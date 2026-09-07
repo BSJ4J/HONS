@@ -1,92 +1,347 @@
+```html
 <!DOCTYPE html>
 <html>
+
 <head>
+
     <title>Lucky Draw</title>
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <meta
+        name="viewport"
+        content="width=device-width, initial-scale=1.0">
 
     <style>
+
         body {
             font-family: Arial, sans-serif;
             text-align: center;
             padding: 50px 20px;
+            background: #f7f7f7;
+        }
+
+        .container {
+            max-width: 450px;
+            margin: auto;
+            background: white;
+            padding: 35px 25px;
+            border-radius: 15px;
+            box-shadow: 0 5px 20px rgba(0,0,0,0.1);
+        }
+
+        input {
+            width: 90%;
+            padding: 14px;
+            font-size: 16px;
+            margin: 15px 0;
+            border: 1px solid #ccc;
+            border-radius: 8px;
+            box-sizing: border-box;
         }
 
         button {
-            padding: 12px 24px;
+            padding: 14px 25px;
             font-size: 18px;
             cursor: pointer;
+            border: none;
+            border-radius: 8px;
+            background: #222;
+            color: white;
+        }
+
+        button:disabled {
+            opacity: 0.5;
+            cursor: not-allowed;
         }
 
         .popup {
             display: none;
             position: fixed;
             inset: 0;
-            background: rgba(0,0,0,0.6);
+            background: rgba(0,0,0,0.65);
+            padding: 20px;
         }
 
         .popup-content {
             background: white;
             max-width: 400px;
             margin: 120px auto;
-            padding: 30px;
-            border-radius: 12px;
+            padding: 35px;
+            border-radius: 15px;
+        }
+
+        .prize {
+            font-size: 25px;
+            font-weight: bold;
+            margin: 25px 0;
         }
 
         .survey-btn {
             display: inline-block;
             margin-top: 15px;
-            padding: 12px 24px;
+            padding: 14px 25px;
             background: #007bff;
             color: white;
             text-decoration: none;
             border-radius: 8px;
         }
+
+        .error {
+            color: #c00;
+            margin-top: 15px;
+        }
+
+        .loading {
+            display: none;
+            margin-top: 15px;
+        }
+
     </style>
+
 </head>
+
+
 <body>
 
+<div class="container">
+
     <h1>🎁 Lucky Draw</h1>
-    <p>Click below to claim your prize!</p>
 
-    <button onclick="drawPrize()">Claim Prize</button>
+    <p>
+        Enter your email address to claim your prize.
+    </p>
 
-    <div class="popup" id="popup">
-        <div class="popup-content">
-            <h2>Congratulations!</h2>
+    <input
+        type="email"
+        id="email"
+        placeholder="Enter your email"
+        autocomplete="email">
 
-            <p id="prizeText"></p>
+    <br>
 
-            <a
-                class="survey-btn"
-                href="https://forms.gle/88UK1djw5bXE7ZNw8"
-                target="_blank">
-                Complete Survey
-            </a>
-        </div>
+    <button
+        id="claimButton"
+        onclick="claimPrize()">
+
+        Claim Prize
+
+    </button>
+
+    <div
+        class="loading"
+        id="loading">
+
+        🎲 Selecting your prize...
+
     </div>
 
-    <script>
-        const prizes = [
-            "10% Discount Voucher",
-            "15% Discount Voucher",
-            "Free Drink",
-            "Free Service Upgrade",
-            "Thank You Gift"
-        ];
+    <div
+        class="error"
+        id="error">
+    </div>
 
-        function drawPrize() {
-            const randomIndex =
-                Math.floor(Math.random() * prizes.length);
+</div>
 
-            const prize = prizes[randomIndex];
 
-            document.getElementById("prizeText").innerText =
-                "You won: " + prize;
+<!-- POPUP -->
 
-            document.getElementById("popup").style.display =
+<div
+    class="popup"
+    id="popup">
+
+    <div class="popup-content">
+
+        <h2 id="popupTitle">
+            Congratulations! 🎉
+        </h2>
+
+        <p id="prizeText"></p>
+
+        <a
+            class="survey-btn"
+            href="https://forms.gle/88UK1djw5bXE7ZNw8"
+            target="_blank">
+
+            Complete Survey
+
+        </a>
+
+    </div>
+
+</div>
+
+
+<script>
+
+
+// =====================================================
+// PUT YOUR GOOGLE APPS SCRIPT URL HERE
+// =====================================================
+
+const SCRIPT_URL =
+    "https://script.google.com/macros/s/AKfycbx8wi6IPVcXxWMANCARnqvnXV5aH8JncOi7tv7DxmecoA-8LoXzfX4B-j8cuOsaHwQTJQ/exec";
+
+
+// =====================================================
+// CLAIM PRIZE
+// =====================================================
+
+async function claimPrize() {
+
+    const emailInput =
+        document.getElementById("email");
+
+    const button =
+        document.getElementById("claimButton");
+
+    const loading =
+        document.getElementById("loading");
+
+    const error =
+        document.getElementById("error");
+
+
+    const email =
+        emailInput.value.trim();
+
+
+    // -----------------------------------------------
+    // Validate email
+    // -----------------------------------------------
+
+    if (!email) {
+
+        error.innerText =
+            "Please enter your email address.";
+
+        return;
+    }
+
+
+    const emailRegex =
+        /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+
+
+    if (!emailRegex.test(email)) {
+
+        error.innerText =
+            "Please enter a valid email address.";
+
+        return;
+    }
+
+
+    // -----------------------------------------------
+    // Disable button
+    // -----------------------------------------------
+
+    button.disabled = true;
+
+    error.innerText = "";
+
+    loading.style.display = "block";
+
+
+    try {
+
+        const data =
+            new URLSearchParams();
+
+        data.append("action", "claim");
+        data.append("email", email);
+
+
+        const response =
+            await fetch(
+                SCRIPT_URL,
+                {
+                    method: "POST",
+                    body: data
+                }
+            );
+
+
+        const result =
+            await response.json();
+
+
+        loading.style.display = "none";
+
+
+        // -------------------------------------------
+        // Already claimed
+        // -------------------------------------------
+
+        if (result.alreadyClaimed) {
+
+            document.getElementById("popupTitle")
+                .innerText =
+                "Already Claimed";
+
+            document.getElementById("prizeText")
+                .innerText =
+                "This email has already claimed: " +
+                result.prize;
+
+            document.getElementById("popup")
+                .style.display =
                 "block";
+
+            button.disabled = false;
+
+            return;
         }
-    </script>
+
+
+        // -------------------------------------------
+        // Successful claim
+        // -------------------------------------------
+
+        if (result.success) {
+
+            document.getElementById("popupTitle")
+                .innerText =
+                "Congratulations! 🎉";
+
+            document.getElementById("prizeText")
+                .innerText =
+                "You won: " + result.prize;
+
+            document.getElementById("popup")
+                .style.display =
+                "block";
+
+            return;
+        }
+
+
+        // -------------------------------------------
+        // Error
+        // -------------------------------------------
+
+        error.innerText =
+            result.message ||
+            "Something went wrong.";
+
+        button.disabled = false;
+
+
+    } catch (err) {
+
+        loading.style.display = "none";
+
+        error.innerText =
+            "Unable to connect to the prize system. Please try again.";
+
+        button.disabled = false;
+
+    }
+
+}
+
+
+</script>
 
 </body>
+
 </html>
+```
