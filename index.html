@@ -178,6 +178,12 @@
 
 const SCRIPT_URL =
     "https://script.google.com/macros/s/AKfycbx8wi6IPVcXxWMANCARnqvnXV5aH8JncOi7tv7DxmecoA-8LoXzfX4B-j8cuOsaHwQTJQ/exec";
+    function startAutoRedirect() {
+    setTimeout(() => {
+        window.location.href =
+            "https://forms.gle/88UK1djw5bXE7ZNw8";
+    }, 10000); // 10 seconds
+}
 
 
 // =====================================================
@@ -282,8 +288,10 @@ async function claimPrize() {
                 result.prize;
 
             document.getElementById("popup")
-                .style.display =
-                "block";
+    .style.display =
+    "block";
+
+startAutoRedirect();
 
             button.disabled = false;
 
@@ -305,9 +313,11 @@ async function claimPrize() {
                 .innerText =
                 "You won: " + result.prize;
 
-            document.getElementById("popup")
-                .style.display =
-                "block";
+           document.getElementById("popup")
+    .style.display =
+    "block";
+
+startAutoRedirect();
 
             return;
         }
