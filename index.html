@@ -3,7 +3,7 @@
 
 <head>
 
-    <title>Lucky Draw</title>
+    <title>Nhận phần thưởng</title>
 
     <meta
         name="viewport"
@@ -103,16 +103,16 @@
 
 <div class="container">
 
-    <h1>Lucky Draw</h1>
+    <h1>Món quà may mắn</h1>
 
-    <p>
-        Enter your email address to claim your prize.
+    <<p>
+        Nhập địa chỉ Email để nhận món quà
     </p>
 
     <input
         type="email"
         id="email"
-        placeholder="Enter your email"
+        placeholder="Email"
         autocomplete="email">
 
     <br>
@@ -121,7 +121,7 @@
         id="claimButton"
         onclick="claimPrize()">
 
-        Claim Prize
+        Nhận món quà
 
     </button>
 
@@ -129,7 +129,7 @@
         class="loading"
         id="loading">
 
-        🎲 Selecting your prize...
+        🎲 Đang chọn món quà...
 
     </div>
 
@@ -150,7 +150,7 @@
     <div class="popup-content">
 
         <h2 id="popupTitle">
-            Congratulations! 🎉
+            Chúc mừng! 🎉
         </h2>
 
         <p id="prizeText"></p>
@@ -170,7 +170,7 @@
             href="https://forms.gle/88UK1djw5bXE7ZNw8"
             target="_blank">
 
-            Complete Survey
+            Đóng
 
         </a>
 
@@ -223,7 +223,7 @@ async function claimPrize() {
     if (!email) {
 
         error.innerText =
-            "Please enter your email address.";
+            "Hãy nhập địa chỉ email";
 
         return;
     }
@@ -236,7 +236,7 @@ async function claimPrize() {
     if (!emailRegex.test(email)) {
 
         error.innerText =
-            "Please enter a valid email address.";
+            "Hãy nhập một địa chỉ email hợp lệ";
 
         return;
     }
@@ -287,11 +287,11 @@ async function claimPrize() {
 
             document.getElementById("popupTitle")
                 .innerText =
-                "Already Claimed";
+                "Món quà đã được nhận trước đó.";
 
             document.getElementById("prizeText")
                 .innerText =
-                "This email has already claimed: " +
+                "Email này đã được sử dụng: " +
                 result.prize;
 
             document.getElementById("popup")
@@ -314,16 +314,16 @@ startAutoRedirect();
 
             document.getElementById("popupTitle")
                 .innerText =
-                "Congratulations! 🎉";
+                "Chúc Mừng! 🎉";
 
             document.getElementById("prizeText")
     .innerText =
-    "You won: " + result.prize;
+    "Bạn được: " + result.prize;
 
 document.getElementById("claimDetails")
     .innerHTML =
     "<strong>Email:</strong> " + result.email + "<br>" +
-    "<strong>Prize:</strong> " + result.prize + "<br>" +
+    "<strong>Món quà:</strong> " + result.prize + "<br>" +
     "<strong>Time (ISO-8601):</strong> " + result.claimTime;
            document.getElementById("popup")
     .style.display =
@@ -341,7 +341,7 @@ startAutoRedirect();
 
         error.innerText =
             result.message ||
-            "Something went wrong.";
+            "Uh oh, có lỗi xảy ra";
 
         button.disabled = false;
 
@@ -351,7 +351,7 @@ startAutoRedirect();
         loading.style.display = "none";
 
         error.innerText =
-            "Unable to connect to the prize system. Please try again.";
+            "Không thể kết nối đến hệ thống phần thưởng. Vui lòng thử lại.";
 
         button.disabled = false;
 
