@@ -344,7 +344,12 @@ startAutoRedirectWin();
         // NoStock
         //-------------------------------------------
 
-        if (result.message === "Rất tiếc, chúng tôi đã hết món quà.") {
+        //-------------------------------------------
+// NoStock
+//-------------------------------------------
+
+if (!result.success &&
+    result.message === "Rất tiếc, chúng tôi đã hết món quà.") {
 
     document.getElementById("popupTitle")
         .innerText =
@@ -352,8 +357,10 @@ startAutoRedirectWin();
 
     document.getElementById("prizeText")
         .innerHTML =
-        "Rất tiếc, chúng tôi đã hết món quà.<br><br>" +
-        
+        "Rất tiếc, chúng tôi đã hết món quà.";
+
+    document.getElementById("claimDetails")
+        .innerHTML = "";
 
     document.getElementById("popup")
         .style.display =
