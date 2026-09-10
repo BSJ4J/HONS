@@ -185,11 +185,18 @@
 
 const SCRIPT_URL =
     "https://script.google.com/macros/s/AKfycbx8wi6IPVcXxWMANCARnqvnXV5aH8JncOi7tv7DxmecoA-8LoXzfX4B-j8cuOsaHwQTJQ/exec";
-    function startAutoRedirect() {
+    function startAutoRedirectWin() {
     setTimeout(() => {
         window.location.href =
             "https://forms.gle/88UK1djw5bXE7ZNw8";
-    }, 12500);
+    }, 10000); // 10 seconds for winners
+}
+
+function startAutoRedirectNoStock() {
+    setTimeout(() => {
+        window.location.href =
+            "https://forms.gle/88UK1djw5bXE7ZNw8";
+    }, 5000); // 5 seconds when out of stock
 }
 
 
@@ -298,7 +305,7 @@ async function claimPrize() {
     .style.display =
     "block";
 
-startAutoRedirect();
+startAutoRedirectWin();
 
             button.disabled = false;
 
@@ -329,10 +336,33 @@ document.getElementById("claimDetails")
     .style.display =
     "block";
 
-startAutoRedirect();
+startAutoRedirectWin();
 
             return;
         }
+        //-------------------------------------------
+        // NoStock
+        //-------------------------------------------
+
+        if (result.message === "Rất tiếc, chúng tôi đã hết món quà.") {
+
+    document.getElementById("popupTitle")
+        .innerText =
+        "Phần quà may mắn đã hết";
+
+    document.getElementById("prizeText")
+        .innerHTML =
+        "Rất tiếc, chúng tôi đã hết món quà.<br><br>" +
+        
+
+    document.getElementById("popup")
+        .style.display =
+        "block";
+
+    startAutoRedirectNoStock();
+
+    return;
+}
 
 
         // -------------------------------------------
