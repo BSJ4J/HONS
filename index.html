@@ -218,6 +218,13 @@ async function claimPrize() {
 
     const emailInput =
         document.getElementById("email");
+    const fullName =
+    document.getElementById("fullName")
+        .value.trim();
+
+const className =
+    document.getElementById("className")
+        .value.trim();
 
     const button =
         document.getElementById("claimButton");
@@ -236,6 +243,16 @@ async function claimPrize() {
     // -----------------------------------------------
     // Validate email
     // -----------------------------------------------
+
+    if (!fullName) {
+    error.innerText = "Hãy điền Họ và tên";
+    return;
+}
+
+if (!className) {
+    error.innerText = "Hãy điền Lớp";
+    return;
+}
 
     if (!email) {
 
@@ -272,12 +289,13 @@ async function claimPrize() {
 
     try {
 
-        const data =
-            new URLSearchParams();
+       const data =
+    new URLSearchParams();
 
-        data.append("action", "claim");
-        data.append("email", email);
-
+data.append("action", "claim");
+data.append("fullName", fullName);
+data.append("className", className);
+data.append("email", email);
 
         const response =
             await fetch(
@@ -339,9 +357,11 @@ startAutoRedirectWin();
 
 document.getElementById("claimDetails")
     .innerHTML =
+    "<strong>Họ và tên:</strong> " + result.fullName + "<br>" +
+    "<strong>Lớp:</strong> " + result.className + "<br>" +
     "<strong>Email:</strong> " + result.email + "<br>" +
     "<strong>Món quà:</strong> " + result.prize + "<br>" +
-    "<strong>Time (ISO-8601):</strong> " + result.claimTime;
+    "<strong>Thời gian:</strong> " + result.claimTime;
            document.getElementById("popup")
     .style.display =
     "block";
